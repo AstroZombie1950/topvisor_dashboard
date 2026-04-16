@@ -1,0 +1,186 @@
+{
+	"project": "AutoParts Pro",
+	"groups": [
+		{ "id": "g1", "name": "Общие запросы" },
+		{ "id": "g2", "name": "Бренды" },
+		{ "id": "g3", "name": "Доставка" }
+	],
+	"tags": [
+		{ "id": "t1", "name": "Приоритет", "color": "#ef4444" },
+		{ "id": "t2", "name": "На контроле", "color": "#f59e0b" },
+		{ "id": "t3", "name": "Топ", "color": "#22c55e" }
+	],
+	"searchers": [
+		{
+			"name": "Yandex",
+			"key": "yandex",
+			"regions": [
+				{
+					"name": "Москва",
+					"date_range": { "from": "01.04.2026", "to": "16.04.2026" },
+					"check_dates": ["01.04.2026","03.04.2026","05.04.2026","07.04.2026","09.04.2026","11.04.2026","13.04.2026","15.04.2026","16.04.2026"],
+					"serp_changes": ["04.04.2026","10.04.2026","14.04.2026"],
+					"summary": {
+						"donut": {
+							"green":  { "count": 87, "percent": 58 },
+							"yellow": { "count": 41, "percent": 27 },
+							"red":    { "count": 22, "percent": 15 }
+						},
+						"visibility": { "value": 34, "delta": 5,  "sparkline": [18,20,21,23,22,25,27,29,31,34] },
+						"average":    { "value": 8,  "delta": -2, "sparkline": [14,13,12,11,11,10,10,9,8,8] },
+						"median":     { "value": 4,  "delta": 1,  "sparkline": [7,6,6,5,5,5,4,4,4,4] },
+						"tops": {
+							"1_3":    { "percent": 28, "count": 42, "delta": 5  },
+							"1_10":   { "percent": 58, "count": 87, "delta": 8  },
+							"11_30":  { "percent": 27, "count": 41, "delta": -3 },
+							"31_50":  { "percent": 8,  "count": 12, "delta": -2 },
+							"51_100": { "percent": 5,  "count": 7,  "delta": -1 },
+							"100+":   { "percent": 2,  "count": 3,  "delta": -2 }
+						}
+					},
+					"dates": ["16.04.2026","15.04.2026","14.04.2026","13.04.2026","12.04.2026"],
+					"dates_top10_percent": [58,54,51,49,47],
+					"keywords": [
+						{ "phrase": "купить запчасти для авто",       "frequency": 8900, "group": "g1", "tags": ["t1","t3"], "positions": [2,2,3,3,4],   "deltas": [0,1,0,1,0]  },
+						{ "phrase": "автозапчасти онлайн",            "frequency": 5400, "group": "g1", "tags": ["t3"],      "positions": [1,1,1,2,2],   "deltas": [0,0,1,0,0]  },
+						{ "phrase": "запчасти с доставкой",           "frequency": 4200, "group": "g3", "tags": ["t2"],      "positions": [3,4,4,5,5],   "deltas": [1,0,1,0,0]  },
+						{ "phrase": "оригинальные запчасти",          "frequency": 3800, "group": "g1", "tags": [],          "positions": [5,5,6,6,7],   "deltas": [0,1,0,1,0]  },
+						{ "phrase": "запчасти для иномарок",          "frequency": 3200, "group": "g1", "tags": ["t1"],      "positions": [2,3,3,4,4],   "deltas": [1,0,1,0,0]  },
+						{ "phrase": "контрактные запчасти",           "frequency": 2900, "group": "g1", "tags": [],          "positions": [7,7,8,9,9],   "deltas": [0,1,1,0,0]  },
+						{ "phrase": "запчасти toyota",                "frequency": 2700, "group": "g2", "tags": ["t3"],      "positions": [1,1,2,2,3],   "deltas": [0,1,0,1,0]  },
+						{ "phrase": "запчасти bmw",                   "frequency": 2500, "group": "g2", "tags": ["t3"],      "positions": [3,3,3,4,4],   "deltas": [0,0,1,0,0]  },
+						{ "phrase": "запчасти mercedes",              "frequency": 2300, "group": "g2", "tags": [],          "positions": [4,5,5,6,6],   "deltas": [1,0,1,0,0]  },
+						{ "phrase": "запчасти audi",                  "frequency": 2100, "group": "g2", "tags": [],          "positions": [2,2,3,3,4],   "deltas": [0,1,0,1,0]  },
+						{ "phrase": "запчасти volkswagen",            "frequency": 1900, "group": "g2", "tags": [],          "positions": [6,6,7,7,8],   "deltas": [0,1,0,1,0]  },
+						{ "phrase": "запчасти hyundai",               "frequency": 1800, "group": "g2", "tags": ["t2"],      "positions": [3,4,4,5,5],   "deltas": [1,0,1,0,0]  },
+						{ "phrase": "запчасти kia",                   "frequency": 1700, "group": "g2", "tags": ["t2"],      "positions": [5,5,6,6,7],   "deltas": [0,1,0,1,0]  },
+						{ "phrase": "запчасти nissan",                "frequency": 1600, "group": "g2", "tags": [],          "positions": [2,2,2,3,3],   "deltas": [0,0,1,0,0]  },
+						{ "phrase": "запчасти honda",                 "frequency": 1500, "group": "g2", "tags": [],          "positions": [8,9,9,10,10], "deltas": [1,0,1,0,0]  },
+						{ "phrase": "купить двигатель б/у",           "frequency": 1400, "group": "g1", "tags": ["t1"],      "positions": [4,4,5,5,6],   "deltas": [0,1,0,1,0]  },
+						{ "phrase": "контрактный двигатель",          "frequency": 1300, "group": "g1", "tags": ["t1","t3"], "positions": [1,1,2,2,2],   "deltas": [0,1,0,0,0]  },
+						{ "phrase": "двигатель с гарантией",          "frequency": 1200, "group": "g1", "tags": [],          "positions": [3,3,4,4,5],   "deltas": [0,1,0,1,0]  },
+						{ "phrase": "купить кузовные детали",         "frequency": 1100, "group": "g1", "tags": [],          "positions": [7,8,8,9,9],   "deltas": [1,0,1,0,0]  },
+						{ "phrase": "бампер передний купить",         "frequency": 1050, "group": "g1", "tags": [],          "positions": [2,2,3,3,4],   "deltas": [0,1,0,1,0]  },
+						{ "phrase": "крыло автомобильное купить",     "frequency": 980,  "group": "g1", "tags": [],          "positions": [5,5,5,6,6],   "deltas": [0,0,1,0,0]  },
+						{ "phrase": "тормозные колодки купить",       "frequency": 720,  "group": "g1", "tags": ["t2"],      "positions": [2,2,3,3,4],   "deltas": [0,1,0,1,0]  },
+						{ "phrase": "амортизаторы для авто",          "frequency": 700,  "group": "g1", "tags": [],          "positions": [4,4,4,5,5],   "deltas": [0,0,1,0,0]  },
+						{ "phrase": "запчасти с доставкой по России", "frequency": 680,  "group": "g3", "tags": ["t2"],      "positions": [8,9,10,11,12],"deltas": [1,1,1,1,0]  },
+						{ "phrase": "коробка передач б/у",            "frequency": 650,  "group": "g1", "tags": [],          "positions": [3,3,4,4,5],   "deltas": [0,1,0,1,0]  },
+						{ "phrase": "автозапчасти дешево",            "frequency": 630,  "group": "g1", "tags": [],          "positions": [6,6,7,7,8],   "deltas": [0,1,0,1,0]  },
+						{ "phrase": "запчасти с разборки",            "frequency": 610,  "group": "g1", "tags": [],          "positions": [2,3,3,4,4],   "deltas": [1,0,1,0,0]  },
+						{ "phrase": "масло моторное 5w40",            "frequency": 370,  "group": "g1", "tags": [],          "positions": [2,2,3,3,4],   "deltas": [0,1,0,1,0]  },
+						{ "phrase": "турбина для авто купить",        "frequency": 290,  "group": "g1", "tags": ["t1"],      "positions": [2,2,3,3,4],   "deltas": [0,1,0,1,0]  },
+						{ "phrase": "доставка запчастей курьером",    "frequency": 250,  "group": "g3", "tags": [],          "positions": [5,5,6,7,7],   "deltas": [0,1,1,0,0]  },
+						{ "phrase": "экспресс доставка запчастей",    "frequency": 210,  "group": "g3", "tags": ["t2"],      "positions": [8,8,9,9,10],  "deltas": [0,1,0,1,0]  },
+						{ "phrase": "ремень грм купить",              "frequency": 390,  "group": "g1", "tags": [],          "positions": [4,4,5,5,6],   "deltas": [0,1,0,1,0]  },
+						{ "phrase": "запчасти mazda",                 "frequency": 790,  "group": "g2", "tags": [],          "positions": [9,9,10,10,11],"deltas": [0,1,0,1,0]  },
+						{ "phrase": "запчасти subaru",                "frequency": 760,  "group": "g2", "tags": [],          "positions": [7,8,8,9,9],   "deltas": [1,0,1,0,0]  },
+						{ "phrase": "радиатор охлаждения купить",     "frequency": 440,  "group": "g1", "tags": [],          "positions": [2,2,3,3,4],   "deltas": [0,1,0,1,0]  }
+					]
+				},
+				{
+					"name": "Екатеринбург",
+					"date_range": { "from": "07.04.2026", "to": "16.04.2026" },
+					"check_dates": ["07.04.2026","09.04.2026","11.04.2026","13.04.2026","15.04.2026","16.04.2026"],
+					"serp_changes": ["10.04.2026","14.04.2026"],
+					"summary": {
+						"donut": {
+							"green":  { "count": 62, "percent": 41 },
+							"yellow": { "count": 55, "percent": 37 },
+							"red":    { "count": 33, "percent": 22 }
+						},
+						"visibility": { "value": 22, "delta": 3,  "sparkline": [12,13,14,15,16,17,18,19,21,22] },
+						"average":    { "value": 12, "delta": -1, "sparkline": [17,16,15,14,14,13,13,12,12,12] },
+						"median":     { "value": 6,  "delta": 0,  "sparkline": [9,8,8,7,7,7,6,6,6,6] },
+						"tops": {
+							"1_3":    { "percent": 18, "count": 27, "delta": 3  },
+							"1_10":   { "percent": 41, "count": 62, "delta": 5  },
+							"11_30":  { "percent": 37, "count": 55, "delta": -2 },
+							"31_50":  { "percent": 12, "count": 18, "delta": -1 },
+							"51_100": { "percent": 7,  "count": 11, "delta": 0  },
+							"100+":   { "percent": 3,  "count": 4,  "delta": -5 }
+						}
+					},
+					"dates": ["16.04.2026","15.04.2026","13.04.2026"],
+					"dates_top10_percent": [41,38,35],
+					"keywords": [
+						{ "phrase": "купить запчасти для авто",       "frequency": 3200, "group": "g1", "tags": ["t1"], "positions": [4,5,6],    "deltas": [1,1,0]  },
+						{ "phrase": "автозапчасти онлайн",            "frequency": 2100, "group": "g1", "tags": ["t3"], "positions": [2,2,3],    "deltas": [0,1,0]  },
+						{ "phrase": "запчасти с доставкой",           "frequency": 1800, "group": "g3", "tags": [],     "positions": [5,6,7],    "deltas": [1,1,0]  },
+						{ "phrase": "оригинальные запчасти",          "frequency": 1500, "group": "g1", "tags": [],     "positions": [7,8,9],    "deltas": [1,1,0]  },
+						{ "phrase": "запчасти для иномарок",          "frequency": 1300, "group": "g1", "tags": ["t1"], "positions": [3,4,5],    "deltas": [1,1,0]  },
+						{ "phrase": "контрактные запчасти",           "frequency": 1100, "group": "g1", "tags": [],     "positions": [9,10,11],  "deltas": [1,1,0]  },
+						{ "phrase": "запчасти toyota",                "frequency": 980,  "group": "g2", "tags": ["t3"], "positions": [2,3,4],    "deltas": [1,1,0]  },
+						{ "phrase": "запчасти bmw",                   "frequency": 870,  "group": "g2", "tags": ["t3"], "positions": [4,5,6],    "deltas": [1,1,0]  },
+						{ "phrase": "запчасти mercedes",              "frequency": 760,  "group": "g2", "tags": [],     "positions": [6,7,8],    "deltas": [1,1,0]  },
+						{ "phrase": "запчасти audi",                  "frequency": 690,  "group": "g2", "tags": [],     "positions": [3,4,5],    "deltas": [1,1,0]  },
+						{ "phrase": "запчасти volkswagen",            "frequency": 620,  "group": "g2", "tags": [],     "positions": [8,9,10],   "deltas": [1,1,0]  },
+						{ "phrase": "запчасти hyundai",               "frequency": 580,  "group": "g2", "tags": ["t2"], "positions": [5,6,7],    "deltas": [1,1,0]  },
+						{ "phrase": "запчасти kia",                   "frequency": 540,  "group": "g2", "tags": ["t2"], "positions": [7,8,9],    "deltas": [1,1,0]  },
+						{ "phrase": "запчасти nissan",                "frequency": 510,  "group": "g2", "tags": [],     "positions": [3,4,5],    "deltas": [1,1,0]  },
+						{ "phrase": "запчасти honda",                 "frequency": 480,  "group": "g2", "tags": [],     "positions": [10,11,13], "deltas": [1,2,0]  },
+						{ "phrase": "купить двигатель б/у",           "frequency": 440,  "group": "g1", "tags": ["t1"], "positions": [6,7,8],    "deltas": [1,1,0]  },
+						{ "phrase": "контрактный двигатель",          "frequency": 410,  "group": "g1", "tags": ["t1"], "positions": [2,3,4],    "deltas": [1,1,0]  },
+						{ "phrase": "тормозные колодки купить",       "frequency": 320,  "group": "g1", "tags": ["t2"], "positions": [4,5,6],    "deltas": [1,1,0]  },
+						{ "phrase": "амортизаторы для авто",          "frequency": 290,  "group": "g1", "tags": [],     "positions": [6,7,8],    "deltas": [1,1,0]  },
+						{ "phrase": "коробка передач б/у",            "frequency": 270,  "group": "g1", "tags": [],     "positions": [5,6,7],    "deltas": [1,1,0]  },
+						{ "phrase": "запчасти с доставкой по России", "frequency": 240,  "group": "g3", "tags": ["t2"], "positions": [11,13,15], "deltas": [2,2,0]  },
+						{ "phrase": "доставка запчастей курьером",    "frequency": 190,  "group": "g3", "tags": [],     "positions": [7,8,9],    "deltas": [1,1,0]  },
+						{ "phrase": "ремень грм купить",              "frequency": 180,  "group": "g1", "tags": [],     "positions": [6,7,8],    "deltas": [1,1,0]  },
+						{ "phrase": "запчасти mazda",                 "frequency": 310,  "group": "g2", "tags": [],     "positions": [11,12,14], "deltas": [1,2,0]  },
+						{ "phrase": "масло моторное 5w40",            "frequency": 160,  "group": "g1", "tags": [],     "positions": [4,5,6],    "deltas": [1,1,0]  }
+					]
+				}
+			]
+		},
+		{
+			"name": "Google",
+			"key": "google",
+			"regions": [
+				{
+					"name": "Москва",
+					"date_range": { "from": "07.04.2026", "to": "16.04.2026" },
+					"check_dates": ["09.04.2026","12.04.2026","15.04.2026","16.04.2026"],
+					"serp_changes": ["11.04.2026"],
+					"summary": {
+						"donut": {
+							"green":  { "count": 71, "percent": 47 },
+							"yellow": { "count": 52, "percent": 35 },
+							"red":    { "count": 27, "percent": 18 }
+						},
+						"visibility": { "value": 28, "delta": 4,  "sparkline": [15,16,17,18,19,21,22,24,26,28] },
+						"average":    { "value": 10, "delta": -1, "sparkline": [15,14,13,13,12,12,11,11,10,10] },
+						"median":     { "value": 5,  "delta": 1,  "sparkline": [8,7,7,6,6,6,5,5,5,5] },
+						"tops": {
+							"1_3":    { "percent": 22, "count": 33, "delta": 4  },
+							"1_10":   { "percent": 47, "count": 71, "delta": 6  },
+							"11_30":  { "percent": 35, "count": 52, "delta": -2 },
+							"31_50":  { "percent": 10, "count": 15, "delta": -1 },
+							"51_100": { "percent": 6,  "count": 9,  "delta": 0  },
+							"100+":   { "percent": 2,  "count": 3,  "delta": -7 }
+						}
+					},
+					"dates": ["16.04.2026","15.04.2026","12.04.2026","09.04.2026"],
+					"dates_top10_percent": [47,44,41,38],
+					"keywords": [
+						{ "phrase": "купить запчасти для авто",       "frequency": 8900, "group": "g1", "tags": ["t1","t3"], "positions": [3,3,4,5],   "deltas": [0,1,1,0]  },
+						{ "phrase": "автозапчасти онлайн",            "frequency": 5400, "group": "g1", "tags": ["t3"],      "positions": [1,2,2,3],   "deltas": [1,0,1,0]  },
+						{ "phrase": "запчасти с доставкой",           "frequency": 4200, "group": "g3", "tags": ["t2"],      "positions": [4,5,5,6],   "deltas": [1,0,1,0]  },
+						{ "phrase": "оригинальные запчасти",          "frequency": 3800, "group": "g1", "tags": [],          "positions": [6,6,7,7],   "deltas": [0,1,0,0]  },
+						{ "phrase": "запчасти для иномарок",          "frequency": 3200, "group": "g1", "tags": ["t1"],      "positions": [3,4,4,5],   "deltas": [1,0,1,0]  },
+						{ "phrase": "запчасти toyota",                "frequency": 2700, "group": "g2", "tags": ["t3"],      "positions": [2,2,3,3],   "deltas": [0,1,0,0]  },
+						{ "phrase": "запчасти bmw",                   "frequency": 2500, "group": "g2", "tags": ["t3"],      "positions": [4,4,5,5],   "deltas": [0,1,0,0]  },
+						{ "phrase": "запчасти mercedes",              "frequency": 2300, "group": "g2", "tags": [],          "positions": [5,6,6,7],   "deltas": [1,0,1,0]  },
+						{ "phrase": "запчасти audi",                  "frequency": 2100, "group": "g2", "tags": [],          "positions": [3,3,4,4],   "deltas": [0,1,0,0]  },
+						{ "phrase": "контрактный двигатель",          "frequency": 1300, "group": "g1", "tags": ["t1","t3"], "positions": [2,2,3,4],   "deltas": [0,1,1,0]  },
+						{ "phrase": "тормозные колодки купить",       "frequency": 720,  "group": "g1", "tags": ["t2"],      "positions": [3,3,4,5],   "deltas": [0,1,1,0]  },
+						{ "phrase": "амортизаторы для авто",          "frequency": 700,  "group": "g1", "tags": [],          "positions": [5,5,6,7],   "deltas": [0,1,1,0]  },
+						{ "phrase": "ремень грм купить",              "frequency": 390,  "group": "g1", "tags": [],          "positions": [5,6,7,8],   "deltas": [1,1,1,0]  },
+						{ "phrase": "запчасти mazda",                 "frequency": 790,  "group": "g2", "tags": [],          "positions": [10,11,12,14],"deltas": [1,1,2,0] },
+						{ "phrase": "доставка запчастей курьером",    "frequency": 250,  "group": "g3", "tags": [],          "positions": [6,7,8,9],   "deltas": [1,1,1,0]  }
+					]
+				}
+			]
+		}
+	]
+}

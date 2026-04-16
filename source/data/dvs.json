@@ -1,0 +1,92 @@
+{
+	"project": "DVS",
+	"groups": [],
+	"tags": [],
+	"searchers": [
+		{
+			"name": "Yandex",
+			"key": "yandex",
+			"regions": [
+				{
+					"name": "Екатеринбург",
+					"date_range": { "from": "06.04.2026", "to": "15.04.2026" },
+					"check_dates": ["13.04.2026","14.04.2026","15.04.2026"],
+					"serp_changes": [],
+					"summary": {
+						"donut": {
+							"green":  { "count": 0,  "percent": 0   },
+							"yellow": { "count": 51, "percent": 100 },
+							"red":    { "count": 0,  "percent": 0   }
+						},
+						"visibility": { "value": null, "delta": null, "sparkline": [0,0,0,0,0,0,0,0,0,0] },
+						"average":    { "value": 100,  "delta": null, "sparkline": [100,100,100,100,100,100,100,100,100,100] },
+						"median":     { "value": 100,  "delta": null, "sparkline": [100,100,100,100,100,100,100,100,100,100] },
+						"tops": {
+							"1_3":    { "percent": 0,   "count": 0,  "delta": null },
+							"1_10":   { "percent": 0,   "count": 0,  "delta": null },
+							"11_30":  { "percent": 0,   "count": 0,  "delta": null },
+							"31_50":  { "percent": 0,   "count": 0,  "delta": null },
+							"51_100": { "percent": 0,   "count": 0,  "delta": null },
+							"100+":   { "percent": 100, "count": 51, "delta": null }
+						}
+					},
+					"dates": ["15.04.2026","14.04.2026","13.04.2026"],
+					"dates_top10_percent": [0,0,0],
+					"keywords": [
+						{ "phrase": "купить двигатель",                         "frequency": 13,   "positions": [null,null,null] },
+						{ "phrase": "купить контрактный двигатель",             "frequency": 21,   "positions": [null,null,null] },
+						{ "phrase": "купить двигатель с гарантией",             "frequency": null, "positions": [null,null,null] },
+						{ "phrase": "купить двигатель недорого",                "frequency": null, "positions": [null,null,null] },
+						{ "phrase": "купить двигатель в наличии",               "frequency": null, "positions": [null,null,null] },
+						{ "phrase": "купить двигатель с доставкой",             "frequency": null, "positions": [null,null,null] },
+						{ "phrase": "купить мотор для авто",                    "frequency": null, "positions": [null,null,null] },
+						{ "phrase": "купить двигатель бу",                      "frequency": 21,   "positions": [null,null,null] },
+						{ "phrase": "купить двигатель новый",                   "frequency": 4,    "positions": [null,null,null] },
+						{ "phrase": "купить двигатель toyota",                  "frequency": null, "positions": [null,null,null] },
+						{ "phrase": "купить двигатель bmw",                     "frequency": 0,    "positions": [null,null,null] },
+						{ "phrase": "купить двигатель mercedes",                "frequency": null, "positions": [null,null,null] },
+						{ "phrase": "купить двигатель audi",                    "frequency": null, "positions": [null,null,null] },
+						{ "phrase": "купить двигатель volkswagen",              "frequency": null, "positions": [null,null,null] },
+						{ "phrase": "купить двигатель nissan",                  "frequency": null, "positions": [null,null,null] },
+						{ "phrase": "купить двигатель hyundai",                 "frequency": null, "positions": [null,null,null] },
+						{ "phrase": "купить двигатель kia",                     "frequency": null, "positions": [null,null,null] },
+						{ "phrase": "купить двигатель honda",                   "frequency": null, "positions": [null,null,null] },
+						{ "phrase": "купить двигатель mazda",                   "frequency": null, "positions": [null,null,null] },
+						{ "phrase": "купить двигатель toyota camry",            "frequency": null, "positions": [null,null,null] },
+						{ "phrase": "купить двигатель bmw e60",                 "frequency": null, "positions": [null,null,null] },
+						{ "phrase": "купить двигатель mercedes w211",           "frequency": null, "positions": [null,null,null] },
+						{ "phrase": "купить двигатель audi a6",                 "frequency": null, "positions": [null,null,null] },
+						{ "phrase": "купить двигатель volkswagen passat",       "frequency": null, "positions": [null,null,null] },
+						{ "phrase": "купить двигатель nissan x-trail",          "frequency": null, "positions": [null,null,null] },
+						{ "phrase": "купить двигатель hyundai solaris",         "frequency": null, "positions": [null,null,null] },
+						{ "phrase": "купить двигатель kia rio",                 "frequency": null, "positions": [null,null,null] },
+						{ "phrase": "купить двигатель honda cr-v",              "frequency": null, "positions": [null,null,null] },
+						{ "phrase": "купить двигатель mazda 6",                 "frequency": null, "positions": [null,null,null] },
+						{ "phrase": "контрактный двигатель купить",             "frequency": null, "positions": [null,null,null] },
+						{ "phrase": "двигатель из европы купить",               "frequency": null, "positions": [null,null,null] },
+						{ "phrase": "двигатель из японии купить",               "frequency": null, "positions": [null,null,null] },
+						{ "phrase": "двигатель бу с гарантией",                 "frequency": null, "positions": [null,null,null] },
+						{ "phrase": "проверенный двигатель бу купить",          "frequency": null, "positions": [null,null,null] },
+						{ "phrase": "двигатель без пробега по снг",             "frequency": null, "positions": [null,null,null] },
+						{ "phrase": "двигатель с разборки купить",              "frequency": null, "positions": [null,null,null] },
+						{ "phrase": "оригинальный двигатель бу",                "frequency": null, "positions": [null,null,null] },
+						{ "phrase": "контрактный мотор цена",                   "frequency": null, "positions": [null,null,null] },
+						{ "phrase": "двигатель с документами",                  "frequency": null, "positions": [null,null,null] },
+						{ "phrase": "купить двигатель с доставкой по России",   "frequency": null, "positions": [null,null,null] },
+						{ "phrase": "купить двигатель в москве",                "frequency": null, "positions": [null,null,null] },
+						{ "phrase": "купить двигатель в спб",                   "frequency": null, "positions": [null,null,null] },
+						{ "phrase": "купить двигатель с отправкой",             "frequency": null, "positions": [null,null,null] },
+						{ "phrase": "заказать двигатель онлайн",                "frequency": null, "positions": [null,null,null] },
+						{ "phrase": "доставка двигателя транспортной компанией","frequency": null, "positions": [null,null,null] },
+						{ "phrase": "двигатель под заказ",                      "frequency": null, "positions": [null,null,null] },
+						{ "phrase": "срочная доставка двигателя",               "frequency": null, "positions": [null,null,null] },
+						{ "phrase": "двигатель в наличии склад",                "frequency": null, "positions": [null,null,null] },
+						{ "phrase": "купить бензиновый двигатель",              "frequency": null, "positions": [null,null,null] },
+						{ "phrase": "купить дизельный двигатель",               "frequency": null, "positions": [null,null,null] },
+						{ "phrase": "купить турбо двигатель",                   "frequency": null, "positions": [null,null,null] }
+					]
+				}
+			]
+		}
+	]
+}
