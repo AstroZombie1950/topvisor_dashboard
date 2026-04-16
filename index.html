@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Мониторинг позиций</title>
+<style>
+/* === Переменные === */
+:root {
+	--bg: #f0f4f7;
+	--surface: #ffffff;
+	--border: #e2e8ed;
+	--text: #2c3e50;
+	--muted: #8a9ab0;
+	--accent: #3b82f6;
+	--green: #22c55e;
+	--yellow: #f59e0b;
+	--red: #ef4444;
+
+	/* цвета позиций — топ-схема */
+	--top1:  #6bb8e0;
+	--top2:  #7ec4e8;
+	--top3:  #7ec4e8;
+	--top4:  #6dd4a0;
+	--top5:  #7ad8a9;
+	--top6:  #86dcb2;
+	--top7:  #92e0bb;
+	--top8:  #9ee4c4;
+	--top9:  #aae8cc;
+	--top10: #b6ecd4;
+	--top1130: #fff3cd;
+	--top3150: #fde8a0;
+	--top51100: #fcd570;
+	--top100plus: #fdc040;
+	--notfound: #f6e9c5;
+	--down: #fde8e8;
+	--up: #e8fdf0;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+	font-family: 'Segoe UI', system-ui, sans-serif;
+	background: var(--bg);
+	color: var(--text);
+	font-size: 13px;
+	min-height: 100vh;
+}
+
+/* === Панель фильтров === */
+.topbar {
+	background: var(--surface);
+	border-bottom: 1px solid var(--border);
+	padding: 10px 16px;
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	flex-wrap: wrap;
+	position: sticky;
+	top: 0;
+	z-index: 100;
+	box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+.topbar-item {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	background: #f7f9fb;
+	border: 1px solid var(--border);
+	border-radius: 6px;
+	padding: 5px 10px;
+	cursor: pointer;
+	user-select: none;
+	white-space: nowrap;
+	font-size: 13px;
+	color: var(--text);
+	position: relative;
+}
+.topbar-item:hover { background: #eef2f6; }
+.topbar-item .chevron { margin-left: 2px; color: var(--muted); font-size: 10px; }
+.topbar-item .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); }
+.topbar-item.active { border-color: var(--accent); color: var(--accent); }
+
+/* Дропдаун проектов */
+.project-dropdown {
+	position: relative;
+}
+.project-dropdown .dropdown-menu {
+	display: none;
+	position: absolute;
+	top: calc(100% + 4px);
+	left: 0;
+	background: var(--surface);
+	border: 1px solid var(--border);
+	border-radius: 8px;
+	box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+	min-width: 200px;
+	z-index: 200;
+	overflow: hidden;
+}
+.project-dropdown.open .dropdown-menu { display: block; }
+.dropdown-menu .project-item {
+	padding: 10px 14px;
+	cursor: pointer;
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+}
+.dropdown-menu .project-item:hover { background: #f5f8fb; }
+.dropdown-menu .project-item.current { background: #eef4ff; }
+.dropdown-menu .project-item .proj-name { font-weight: 600; }
+.dropdown-menu .project-item .proj-id { color: var(--muted); font-size: 11px; }
+
+/* === Блок статистики === */
+.stats-panel {
+	background: var(--surface);
+	border-bottom: 1px solid var(--border);
+	padding: 12px 16px;
+	display: flex;
+	align-items: center;
+	gap: 0;
+}
+
+/* Донут */
+.donut-wrap {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding-right: 20px;
+	border-right: 1px solid var(--border);
+	flex-shrink: 0;
+}
+.donut-svg { width: 64px; height: 64px; }
+.donut-legend { display: flex; flex-direction: column; gap: 4px; }
+.donut-legend-item {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	font-size: 12px;
+}
+.donut-legend-item .arrow { font-size: 14px; }
+.donut-legend-item .count { font-weight: 600; min-width: 24px; }
+.donut-legend-item .pct { color: var(--muted); min-width: 36px; }
+
+/* Блоки видимость/средняя/медианная */
+.metric-block {
+	display: flex;
+	flex-direction: column;
+	padding: 0 20px;
+	border-right: 1px solid var(--border);
+	min-width: 130px;
+}
+.metric-block .metric-label {
+	font-size: 11px;
+	color: var(--muted);
+	margin-bottom: 4px;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+.metric-block .metric-delta {
+	font-size: 11px;
+	font-weight: 600;
+}
+.metric-block .metric-delta.pos { color: var(--green); }
+.metric-block .metric-delta.neg { color: var(--red); }
+.metric-block .sparkline-wrap {
+	margin-top: 2px;
+	height: 30px;
+}
+.metric-block .metric-val {
+	font-size: 13px;
+	font-weight: 600;
+	color: var(--text);
+}
+
+/* Блоки топов */
+.tops-wrap {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0;
+	padding-left: 12px;
+}
+.top-badge {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 4px 12px;
+	border-right: 1px solid var(--border);
+}
+.top-badge:last-child { border-right: none; }
+.top-badge .badge-label {
+	border-radius: 4px;
+	padding: 2px 7px;
+	font-size: 11px;
+	font-weight: 700;
+	color: #fff;
+	white-space: nowrap;
+}
+.badge-1-3   { background: #3b82f6; }
+.badge-1-10  { background: #22c55e; }
+.badge-11-30 { background: #16a34a; }
+.badge-31-50 { background: #86efac; color: #166534 !important; }
+.badge-51-100{ background: #fde047; color: #854d0e !important; }
+.badge-100plus{ background: #f59e0b; color: #fff !important; }
+
+.top-badge .badge-stats {
+	display: flex;
+	flex-direction: column;
+	gap: 1px;
+}
+.top-badge .badge-pct { font-size: 11px; color: var(--muted); }
+.top-badge .badge-count { font-size: 13px; font-weight: 600; }
+.top-badge .badge-delta { font-size: 11px; font-weight: 600; }
+.top-badge .badge-delta.pos { color: var(--green); }
+.top-badge .badge-delta.neg { color: var(--red); }
+
+/* === Панель поиска и кнопок === */
+.table-toolbar {
+	background: var(--surface);
+	border-bottom: 1px solid var(--border);
+	padding: 8px 16px;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	flex-wrap: wrap;
+}
+.search-box {
+	flex: 1;
+	min-width: 200px;
+	max-width: 320px;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	background: #f7f9fb;
+	border: 1px solid var(--border);
+	border-radius: 6px;
+	padding: 5px 10px;
+}
+.search-box input {
+	border: none;
+	background: transparent;
+	outline: none;
+	font-size: 13px;
+	color: var(--text);
+	width: 100%;
+}
+.search-box input::placeholder { color: var(--muted); }
+.search-icon { color: var(--muted); font-size: 14px; }
+
+.toolbar-btn {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	padding: 5px 12px;
+	background: #f7f9fb;
+	border: 1px solid var(--border);
+	border-radius: 6px;
+	cursor: pointer;
+	font-size: 13px;
+	color: var(--text);
+	position: relative;
+}
+.toolbar-btn:hover { background: #eef2f6; }
+.toolbar-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+/* Дропдаун сортировки */
+.sort-dropdown { position: relative; }
+.sort-dropdown .sort-menu {
+	display: none;
+	position: absolute;
+	top: calc(100% + 4px);
+	right: 0;
+	background: var(--surface);
+	border: 1px solid var(--border);
+	border-radius: 8px;
+	box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+	min-width: 220px;
+	z-index: 200;
+	overflow: hidden;
+}
+.sort-dropdown.open .sort-menu { display: block; }
+.sort-menu .sort-item {
+	padding: 9px 14px;
+	cursor: pointer;
+	font-size: 13px;
+}
+.sort-menu .sort-item:hover { background: #f5f8fb; }
+.sort-menu .sort-item.active { background: #eef4ff; color: var(--accent); font-weight: 600; }
+
+/* === Таблица === */
+.table-wrap {
+	overflow-x: auto;
+	background: var(--surface);
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	table-layout: fixed;
+}
+
+thead tr th {
+	background: #f7f9fb;
+	border-bottom: 2px solid var(--border);
+	padding: 8px 10px;
+	text-align: center;
+	font-weight: 600;
+	font-size: 12px;
+	color: var(--muted);
+	position: sticky;
+	top: 45px;
+	z-index: 10;
+	white-space: nowrap;
+}
+thead tr th.th-phrase {
+	text-align: left;
+	color: var(--text);
+	font-size: 13px;
+	width: 260px;
+}
+thead tr th.th-freq { width: 70px; }
+thead tr th.th-date { width: 90px; }
+
+/* Подзаголовок с процентом топ-10 */
+.th-date-sub { font-size: 10px; color: var(--muted); font-weight: 400; }
+.th-date-pct { font-size: 10px; color: var(--text); font-weight: 600; }
+
+tbody tr { border-bottom: 1px solid var(--border); }
+tbody tr:hover { background: #fafcff; }
+tbody tr.filtered-out { display: none; }
+
+td {
+	padding: 0;
+	text-align: center;
+	vertical-align: middle;
+}
+td.td-icon { width: 32px; color: var(--muted); font-size: 14px; }
+td.td-phrase {
+	text-align: left;
+	padding: 8px 10px;
+	line-height: 1.4;
+}
+td.td-freq {
+	padding: 8px 4px;
+	color: var(--muted);
+}
+
+/* Ячейка позиции */
+td.td-pos { padding: 3px; }
+.pos-cell {
+	min-height: 38px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	border-radius: 4px;
+	margin: 1px;
+	font-size: 15px;
+	font-weight: 600;
+}
+.pos-cell.not-found {
+	background: var(--notfound);
+	color: var(--muted);
+	font-size: 13px;
+}
+.pos-cell .delta {
+	position: absolute;
+	top: 2px;
+	right: 3px;
+	font-size: 9px;
+	font-weight: 700;
+	line-height: 1;
+}
+.delta.pos { color: #16a34a; }
+.delta.neg { color: #dc2626; }
+
+/* Цвета фона по топу */
+.pos-top1  { background: var(--top1);  }
+.pos-top2  { background: var(--top2);  }
+.pos-top3  { background: var(--top3);  }
+.pos-top4  { background: var(--top4);  }
+.pos-top5  { background: var(--top5);  }
+.pos-top6  { background: var(--top6);  }
+.pos-top7  { background: var(--top7);  }
+.pos-top8  { background: var(--top8);  }
+.pos-top9  { background: var(--top9);  }
+.pos-top10 { background: var(--top10); }
+.pos-top1130   { background: var(--top1130); }
+.pos-top3150   { background: var(--top3150); }
+.pos-top51100  { background: var(--top51100); }
+.pos-top100plus{ background: var(--top100plus); }
+.pos-noclass   { background: #f0f4f7; }
+
+/* === Пустой стейт === */
+.empty-state {
+	padding: 60px 20px;
+	text-align: center;
+	color: var(--muted);
+}
+
+/* === Адаптив === */
+@media (max-width: 768px) {
+	.stats-panel { flex-wrap: wrap; gap: 10px; }
+	.metric-block { min-width: 100px; padding: 0 12px; }
+	.tops-wrap { gap: 4px; }
+	.top-badge { padding: 4px 8px; }
+	thead tr th.th-phrase { width: 160px; }
+	thead tr th.th-date { width: 72px; }
+	.topbar { gap: 6px; }
+}
+@media (max-width: 480px) {
+	.metric-block .metric-label { font-size: 10px; }
+	.donut-wrap { padding-right: 12px; }
+	.tops-wrap { flex-wrap: wrap; }
+}
+</style>
+</head>
+<body>
+
+<!-- === Верхняя панель === -->
+<div class="topbar">
+	<!-- Дропдаун проектов -->
+	<div class="topbar-item project-dropdown" id="projectDropdown" onclick="toggleProjectDropdown()">
+		<span>📁</span>
+		<span id="projectName">Загрузка...</span>
+		<span class="chevron">▼</span>
+		<div class="dropdown-menu" id="projectMenu"></div>
+	</div>
+
+	<!-- Статичные лейблы (декоративные) -->
+	<div class="topbar-item">
+		<span style="color:#f97316; font-weight:700;">Я</span> Yandex <span class="chevron">▼</span>
+	</div>
+	<div class="topbar-item">
+		📍 <span id="topbarRegion">—</span> <span class="chevron">▼</span>
+	</div>
+	<div class="topbar-item">
+		⊞ Все группы <span class="chevron">▼</span>
+	</div>
+	<div class="topbar-item">
+		<span class="dot"></span> Все теги <span class="chevron">▼</span>
+	</div>
+	<div class="topbar-item">
+		📅 <span id="topbarDates">—</span> <span class="chevron">▼</span>
+	</div>
+</div>
+
+<!-- === Блок статистики === -->
+<div class="stats-panel" id="statsPanel">
+	<!-- Донут -->
+	<div class="donut-wrap">
+		<svg class="donut-svg" id="donutSvg" viewBox="0 0 64 64"></svg>
+		<div class="donut-legend" id="donutLegend"></div>
+	</div>
+
+	<!-- Видимость -->
+	<div class="metric-block">
+		<div class="metric-label">
+			Видимость
+			<span class="metric-delta" id="visibilityDelta"></span>
+		</div>
+		<div class="sparkline-wrap"><svg id="sparkVisibility" width="110" height="30"></svg></div>
+		<div class="metric-val" id="visibilityVal"></div>
+	</div>
+
+	<!-- Средняя -->
+	<div class="metric-block">
+		<div class="metric-label">
+			Средняя
+			<span class="metric-delta" id="averageDelta"></span>
+		</div>
+		<div class="sparkline-wrap"><svg id="sparkAverage" width="110" height="30"></svg></div>
+		<div class="metric-val" id="averageVal"></div>
+	</div>
+
+	<!-- Медианная -->
+	<div class="metric-block">
+		<div class="metric-label">
+			Медианная
+			<span class="metric-delta" id="medianDelta"></span>
+		</div>
+		<div class="sparkline-wrap"><svg id="sparkMedian" width="110" height="30"></svg></div>
+		<div class="metric-val" id="medianVal"></div>
+	</div>
+
+	<!-- Блоки топов -->
+	<div class="tops-wrap" id="topsWrap"></div>
+</div>
+
+<!-- === Панель таблицы === -->
+<div class="table-toolbar">
+	<div class="search-box">
+		<span class="search-icon">🔍</span>
+		<input type="text" id="searchInput" placeholder="Поиск по запросам" oninput="filterTable()">
+	</div>
+
+	<div class="toolbar-btn sort-dropdown" id="sortDropdown" onclick="toggleSortDropdown()">
+		↕ Сортировка
+		<div class="sort-menu" id="sortMenu">
+			<div class="sort-item active" data-sort="default" onclick="setSort('default', event)">По умолчанию</div>
+			<div class="sort-item" data-sort="name-az" onclick="setSort('name-az', event)">Имя А-Я</div>
+			<div class="sort-item" data-sort="name-za" onclick="setSort('name-za', event)">Имя Я-А</div>
+			<div class="sort-item" data-sort="freq-desc" onclick="setSort('freq-desc', event)">Частота 9-1</div>
+			<div class="sort-item" data-sort="freq-asc" onclick="setSort('freq-asc', event)">Частота 1-9</div>
+			<div class="sort-item" data-sort="pos-asc" onclick="setSort('pos-asc', event)">Позиция (лучшая)</div>
+			<div class="sort-item" data-sort="pos-desc" onclick="setSort('pos-desc', event)">Позиция (худшая)</div>
+		</div>
+	</div>
+
+	<div class="toolbar-btn" id="filterBtn" onclick="toggleFilter()">
+		▽ Фильтр
+	</div>
+
+	<div class="toolbar-btn" id="onlyTopBtn" onclick="toggleOnlyTop()" title="Показать только запросы в топ-100">
+		Топ-100
+	</div>
+</div>
+
+<!-- === Таблица === -->
+<div class="table-wrap">
+	<table id="posTable">
+		<thead>
+			<tr>
+				<th style="width:32px"></th>
+				<th class="th-phrase" id="thPhrase">Запросы <span id="kwCount"></span></th>
+				<th class="th-freq">Частота<br><span style="color:var(--accent);font-size:10px;">"!ч"</span></th>
+				<!-- даты генерируются JS -->
+			</tr>
+		</thead>
+		<tbody id="tableBody"></tbody>
+	</table>
+	<div class="empty-state" id="emptyState" style="display:none">Ничего не найдено</div>
+</div>
+
+<script>
+/* === Список проектов === */
+const PROJECTS = [
+	{ name: 'DVS',           file: 'dvs.json'  },
+	{ name: 'Kama',          file: 'kama.json' },
+	{ name: 'AutoParts Pro', file: 'demo.json' }
+];
+
+let currentData   = null;
+let currentSort   = 'default';
+let onlyTop       = false;
+let filterActive  = false;
+
+/* === Старт === */
+window.addEventListener('click', (e) => {
+	if (!e.target.closest('#projectDropdown')) closeDropdown('projectDropdown');
+	if (!e.target.closest('#sortDropdown'))    closeDropdown('sortDropdown');
+});
+
+buildProjectMenu();
+loadProject(0);
+
+/* === Построить меню проектов === */
+function buildProjectMenu() {
+	const menu = document.getElementById('projectMenu');
+	menu.innerHTML = PROJECTS.map((p, i) => `
+		<div class="project-item" onclick="loadProject(${i}); closeDropdown('projectDropdown');">
+			<span class="proj-name">${p.name}</span>
+		</div>
+	`).join('');
+}
+
+/* === Загрузить проект === */
+function loadProject(index) {
+	// Подсветить текущий в меню
+	document.querySelectorAll('.project-item').forEach((el, i) => {
+		el.classList.toggle('current', i === index);
+	});
+
+	fetch(PROJECTS[index].file)
+		.then(r => {
+			if (!r.ok) throw new Error('Файл не найден: ' + PROJECTS[index].file);
+			return r.json();
+		})
+		.then(data => {
+			currentData = data;
+			document.getElementById('projectName').textContent = data.project;
+			renderAll(data);
+		})
+		.catch(err => {
+			alert('Ошибка загрузки: ' + err.message);
+		});
+}
+
+/* === Рендер всего === */
+function renderAll(data) {
+	// Topbar
+	document.getElementById('topbarRegion').textContent = data.region;
+	document.getElementById('topbarDates').textContent  = `${data.date_range.from} — ${data.date_range.to}`;
+
+	renderDonut(data.summary.donut);
+	renderMetric('visibility', data.summary.visibility);
+	renderMetric('average',    data.summary.average);
+	renderMetric('median',     data.summary.median);
+	renderTops(data.summary.tops);
+	renderTable(data);
+}
+
+/* === Донут === */
+function renderDonut(d) {
+	const total = d.green.count + d.yellow.count + d.red.count || 1;
+	const cx = 32, cy = 32, r = 26, stroke = 10;
+	const circ = 2 * Math.PI * r;
+
+	const segments = [
+		{ pct: d.green.count  / total, color: '#22c55e' },
+		{ pct: d.yellow.count / total, color: '#f59e0b' },
+		{ pct: d.red.count    / total, color: '#ef4444' }
+	];
+
+	let offset = 0;
+	const paths = segments.map(seg => {
+		const len = seg.pct * circ;
+		const path = `<circle
+			cx="${cx}" cy="${cy}" r="${r}"
+			fill="none"
+			stroke="${seg.color}"
+			stroke-width="${stroke}"
+			stroke-dasharray="${len} ${circ - len}"
+			stroke-dashoffset="${-offset}"
+			transform="rotate(-90 ${cx} ${cy})"
+		/>`;
+		offset += len;
+		return path;
+	});
+
+	/* Если все нули — серый круг */
+	const svg = (total === 1)
+		? `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#e2e8ed" stroke-width="${stroke}"/>`
+		: paths.join('');
+
+	document.getElementById('donutSvg').innerHTML = svg;
+
+	/* Легенда */
+	document.getElementById('donutLegend').innerHTML = `
+		<div class="donut-legend-item">
+			<span class="arrow" style="color:#22c55e">▲</span>
+			<span class="count" style="color:#22c55e">${d.green.count}</span>
+			<span class="pct">${d.green.percent}%</span>
+		</div>
+		<div class="donut-legend-item">
+			<span class="arrow" style="color:#f59e0b">●</span>
+			<span class="count" style="color:#f59e0b">${d.yellow.count}</span>
+			<span class="pct">${d.yellow.percent}%</span>
+		</div>
+		<div class="donut-legend-item">
+			<span class="arrow" style="color:#ef4444">▼</span>
+			<span class="count" style="color:#ef4444">${d.red.count}</span>
+			<span class="pct">${d.red.percent}%</span>
+		</div>
+	`;
+}
+
+/* === Метрика + sparkline === */
+function renderMetric(name, m) {
+	const capName = name.charAt(0).toUpperCase() + name.slice(1);
+
+	const deltaEl = document.getElementById(name + 'Delta');
+	if (m.delta !== null && m.delta !== undefined) {
+		const sign = m.delta > 0 ? '+' : '';
+		deltaEl.textContent = sign + m.delta;
+		deltaEl.className = 'metric-delta ' + (m.delta > 0 ? 'pos' : 'neg');
+	} else {
+		deltaEl.textContent = '—';
+		deltaEl.className = 'metric-delta';
+	}
+
+	const valEl = document.getElementById(name + 'Val');
+	valEl.textContent = (m.value !== null && m.value !== undefined) ? m.value : '—';
+
+	drawSparkline(name + 'Spark' /* unused */, document.getElementById('spark' + capName), m.sparkline);
+}
+
+/* === SVG Sparkline === */
+function drawSparkline(id, svgEl, data) {
+	if (!svgEl || !data || !data.length) return;
+	const w = 110, h = 30, pad = 3;
+	const min = Math.min(...data);
+	const max = Math.max(...data);
+	const range = max - min || 1;
+
+	const pts = data.map((v, i) => {
+		const x = pad + (i / (data.length - 1)) * (w - 2 * pad);
+		const y = h - pad - ((v - min) / range) * (h - 2 * pad);
+		return `${x},${y}`;
+	});
+
+	const dots = data.map((v, i) => {
+		const x = pad + (i / (data.length - 1)) * (w - 2 * pad);
+		const y = h - pad - ((v - min) / range) * (h - 2 * pad);
+		return `<circle cx="${x}" cy="${y}" r="2" fill="#3b82f6"/>`;
+	}).join('');
+
+	svgEl.innerHTML = `
+		<polyline
+			points="${pts.join(' ')}"
+			fill="none"
+			stroke="#93c5fd"
+			stroke-width="1.5"
+			stroke-linejoin="round"
+		/>
+		${dots}
+	`;
+}
+
+/* === Блоки топов === */
+function renderTops(tops) {
+	const config = [
+		{ key: '1_3',    label: '1-3',    cls: 'badge-1-3'    },
+		{ key: '1_10',   label: '1-10',   cls: 'badge-1-10'   },
+		{ key: '11_30',  label: '11-30',  cls: 'badge-11-30'  },
+		{ key: '31_50',  label: '31-50',  cls: 'badge-31-50'  },
+		{ key: '51_100', label: '51-100', cls: 'badge-51-100' },
+		{ key: '100+',   label: '100+',   cls: 'badge-100plus'}
+	];
+
+	document.getElementById('topsWrap').innerHTML = config.map(c => {
+		const t = tops[c.key];
+		const delta = (t.delta !== null && t.delta !== undefined)
+			? `<span class="badge-delta ${t.delta > 0 ? 'pos' : 'neg'}">${t.delta > 0 ? '+' : ''}${t.delta}</span>`
+			: `<span class="badge-delta" style="color:var(--muted)">—</span>`;
+		return `
+			<div class="top-badge">
+				<span class="badge-label ${c.cls}">${c.label}</span>
+				<div class="badge-stats">
+					<span class="badge-pct">${t.percent}%</span>
+					<span class="badge-count">${t.count}</span>
+					${delta}
+				</div>
+			</div>
+		`;
+	}).join('');
+}
+
+/* === Таблица === */
+function renderTable(data) {
+	const thead = document.querySelector('#posTable thead tr');
+	/* Удалить старые колонки дат */
+	while (thead.children.length > 3) thead.removeChild(thead.lastChild);
+
+	/* Добавить заголовки дат */
+	data.dates.forEach((d, i) => {
+		const th = document.createElement('th');
+		th.className = 'th-date';
+		const pct = data.dates_top10_percent && data.dates_top10_percent[i] !== undefined
+			? data.dates_top10_percent[i] + '%'
+			: '';
+		th.innerHTML = `${d}<br><span class="th-date-sub">1-10</span> <span class="th-date-pct">${pct}</span>`;
+		thead.appendChild(th);
+	});
+
+	/* Обновить счётчик */
+	document.getElementById('kwCount').textContent = `(${data.keywords.length})`;
+
+	buildRows(data);
+}
+
+/* === Построить строки по текущей сортировке === */
+function buildRows(data) {
+	let kw = [...(data || currentData).keywords];
+
+	/* Сортировка */
+	if (currentSort === 'name-az') kw.sort((a, b) => a.phrase.localeCompare(b.phrase, 'ru'));
+	else if (currentSort === 'name-za') kw.sort((a, b) => b.phrase.localeCompare(a.phrase, 'ru'));
+	else if (currentSort === 'freq-desc') kw.sort((a, b) => (b.frequency || 0) - (a.frequency || 0));
+	else if (currentSort === 'freq-asc')  kw.sort((a, b) => (a.frequency || 0) - (b.frequency || 0));
+	else if (currentSort === 'pos-asc')   kw.sort((a, b) => (firstPos(a) || 999) - (firstPos(b) || 999));
+	else if (currentSort === 'pos-desc')  kw.sort((a, b) => (firstPos(b) || 0) - (firstPos(a) || 0));
+
+	const tbody = document.getElementById('tableBody');
+	tbody.innerHTML = kw.map(k => buildRow(k, currentData.dates.length)).join('');
+
+	filterTable();
+}
+
+function firstPos(kw) {
+	return kw.positions && kw.positions[0] !== null ? kw.positions[0] : null;
+}
+
+/* === Одна строка === */
+function buildRow(k, datesCount) {
+	const freq = (k.frequency !== null && k.frequency !== undefined) ? k.frequency : '—';
+
+	const posCells = Array.from({ length: datesCount }, (_, i) => {
+		const pos = k.positions ? k.positions[i] : undefined;
+		const delta = k.deltas ? k.deltas[i] : null;
+
+		if (pos === null || pos === undefined) {
+			return `<td class="td-pos"><div class="pos-cell not-found">--</div></td>`;
+		}
+
+		const cls = posClass(pos);
+		const deltaHtml = (delta && delta !== 0)
+			? `<span class="delta ${delta > 0 ? 'pos' : 'neg'}">${delta > 0 ? '+' : ''}${delta}</span>`
+			: '';
+		return `<td class="td-pos"><div class="pos-cell ${cls}">${pos}${deltaHtml}</div></td>`;
+	}).join('');
+
+	return `
+		<tr>
+			<td class="td-icon">—</td>
+			<td class="td-phrase">${escHtml(k.phrase)}</td>
+			<td class="td-freq">${freq}</td>
+			${posCells}
+		</tr>
+	`;
+}
+
+/* === Класс CSS по позиции === */
+function posClass(pos) {
+	if (pos <= 3)   return 'pos-top' + pos;
+	if (pos <= 10)  return 'pos-top' + pos;
+	if (pos <= 30)  return 'pos-top1130';
+	if (pos <= 50)  return 'pos-top3150';
+	if (pos <= 100) return 'pos-top51100';
+	return 'pos-top100plus';
+}
+
+/* === Поиск === */
+function filterTable() {
+	const q = document.getElementById('searchInput').value.toLowerCase();
+	const rows = document.querySelectorAll('#tableBody tr');
+	let visible = 0;
+
+	rows.forEach(row => {
+		const phrase = row.querySelector('.td-phrase')?.textContent.toLowerCase() || '';
+		const hasPos  = onlyTop ? rowHasTopPos(row) : true;
+		const matches = phrase.includes(q);
+		const show = matches && hasPos;
+		row.style.display = show ? '' : 'none';
+		if (show) visible++;
+	});
+
+	document.getElementById('emptyState').style.display = visible === 0 ? 'block' : 'none';
+}
+
+function rowHasTopPos(row) {
+	/* Есть ли хоть одна позиция ≤ 100 */
+	return [...row.querySelectorAll('.pos-cell:not(.not-found)')].length > 0;
+}
+
+/* === Сортировка === */
+function setSort(type, e) {
+	e.stopPropagation();
+	currentSort = type;
+	document.querySelectorAll('.sort-item').forEach(el => {
+		el.classList.toggle('active', el.dataset.sort === type);
+	});
+	if (currentData) buildRows(currentData);
+	closeDropdown('sortDropdown');
+}
+
+/* === Фильтр топ-100 === */
+function toggleOnlyTop() {
+	onlyTop = !onlyTop;
+	document.getElementById('onlyTopBtn').classList.toggle('active', onlyTop);
+	filterTable();
+}
+
+/* === Фильтр (заглушка) === */
+function toggleFilter() {
+	filterActive = !filterActive;
+	document.getElementById('filterBtn').classList.toggle('active', filterActive);
+}
+
+/* === Дропдауны === */
+function toggleProjectDropdown() {
+	document.getElementById('projectDropdown').classList.toggle('open');
+}
+function toggleSortDropdown(e) {
+	document.getElementById('sortDropdown').classList.toggle('open');
+}
+function closeDropdown(id) {
+	document.getElementById(id).classList.remove('open');
+}
+
+/* === Утилиты === */
+function escHtml(str) {
+	return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+</script>
+</body>
+</html>
