@@ -384,8 +384,14 @@ function renderDonut(d) {
 	document.getElementById('donutSvg').innerHTML = arcs;
 	document.getElementById('donutLegend').innerHTML = segs.map(s => {
 		const isOn = F.donut === s.key;
+		/* SVG-иконки в кружочке для каждого типа */
+		const iconSvg = {
+			green:  `<svg width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="7.5" fill="${s.color}"/><path d="M5 9.5L8 6l3 3.5" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>`,
+			yellow: `<svg width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="7.5" fill="${s.color}"/><path d="M5 8h6" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>`,
+			red:    `<svg width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="7.5" fill="${s.color}"/><path d="M5 6.5L8 10l3-3.5" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>`
+		};
 		return `<div class="leg-item ${isOn ? 'leg-on' : ''}" style="color:${s.color}" onclick="toggleDonut('${s.key}')">
-			<span>${s.sym}</span>
+			${iconSvg[s.key]}
 			<span class="leg-cnt">${s.cnt}</span>
 			<span class="leg-pct">${s.pct}%</span>
 		</div>`;
@@ -432,19 +438,26 @@ function drawSpk(el, pts) {
    ТОПЫ
    ============================================================ */
 function renderTops(tops) {
-	document.getElementById('topsWrap').innerHTML = TOP_CFG.map(c => {
+	/* Две колонки по 3 ряда — как в референсе */
+	const col1 = TOP_CFG.slice(0, 3); /* 1-3, 1-10, 11-30 */
+	const col2 = TOP_CFG.slice(3);    /* 31-50, 51-100, 100+ */
+
+	const makeCol = cfg => cfg.map(c => {
 		const t    = tops[c.key];
 		const isOn = F.topRange === c.key;
 		const d    = t.delta != null
-			? `<span class="badge-dlt ${t.delta > 0 ? 'pos' : 'neg'}">${t.delta > 0 ? '+' : ''}${t.delta}</span>`
+			? `<span class="badge-dlt ${t.delta > 0 ? 'pos' : t.delta < 0 ? 'neg' : ''}">${t.delta > 0 ? '+' : ''}${t.delta !== 0 ? t.delta : '—'}</span>`
 			: `<span class="badge-dlt" style="color:var(--muted)">—</span>`;
 		return `<div class="top-badge ${isOn ? 'tbadge-on' : ''}" onclick="toggleTopRange('${c.key}')">
 			<span class="badge-lbl ${c.cls}">${c.lbl}</span>
-			<div class="badge-stats">
-				<span class="badge-pct">${t.percent}%</span>
-				<span class="badge-cnt">${t.count}</span>${d}
-			</div></div>`;
+			<span class="badge-pct">${t.percent}%</span>
+			<span class="badge-cnt">${t.count}</span>
+			${d}
+		</div>`;
 	}).join('');
+
+	document.getElementById('topsWrap').innerHTML =
+		`<div class="tops-col">${makeCol(col1)}</div><div class="tops-col">${makeCol(col2)}</div>`;
 }
 
 function toggleTopRange(key) {
@@ -539,12 +552,12 @@ function rowHtml(k, origIdx, datesCount, grps, tags) {
 	/* Ячейки позиций */
 	const cells = Array.from({ length: datesCount }, (_, i) => {
 		const p = k.positions?.[i] ?? null;
-		const d = k.deltas?.[i]    ?? null;
+		const d = k.deltas?.[i]    ?? 0;
 		if (p === null || p === undefined)
 			return `<td class="tdpos"><div class="pos-cell nf">--</div></td>`;
 		const dh = (d && d !== 0)
 			? `<span class="pdlt ${d > 0 ? 'pos' : 'neg'}">${d > 0 ? '+' : ''}${d}</span>` : '';
-		return `<td class="tdpos"><div class="pos-cell ${pc(p)}">${p}${dh}</div></td>`;
+		return `<td class="tdpos"><div class="pos-cell ${pc(p, d)}">${p}${dh}</div></td>`;
 	}).join('');
 
 	/* Группа */
@@ -564,19 +577,25 @@ function rowHtml(k, origIdx, datesCount, grps, tags) {
 		<td class="tdi">—</td>
 		<td class="tdp">${esc(k.phrase)}</td>
 		<td class="tdf">${freq}</td>
-		<td class="tdg">${grpHtml}</td>
-		<td class="tdi"><div class="tag-dots">${tagsHtml}</div></td>
 		${cells}
 	</tr>`;
 }
 
-function pc(p) {
-	if (p <= 3)   return 'pt' + p;
-	if (p <= 10)  return 'pt' + p;
-	if (p <= 30)  return 'p1130';
-	if (p <= 50)  return 'p3150';
-	if (p <= 100) return 'p51100';
-	return 'p100p';
+function pc(p, d) {
+	/* Не найдено — обрабатывается отдельно */
+	if (p === null || p === undefined) return '';
+
+	/* Цвет по дельте */
+	if (d > 3)  return 'pd-up3';
+	if (d >= 2) return 'pd-up2';
+	if (d === 1) return 'pd-up1';
+	if (d < -3) return 'pd-dn3';
+	if (d <= -2) return 'pd-dn2';
+	if (d === -1) return 'pd-dn1';
+
+	/* Дельта = 0 — цвет по диапазону */
+	if (p <= 10) return 'pt1'; /* все топ-10 один голубой */
+	return 'pnone';
 }
 
 /* ============================================================
@@ -647,7 +666,8 @@ function resetAll(rerender = true) {
 	Object.assign(F, { donut: null, topRange: null, onlyTop: false, status: [], dyn: [], group: null, tag: null });
 	document.getElementById('searchInput').value = '';
 	document.querySelectorAll('.fchip').forEach(c => c.classList.remove('fchip-on'));
-	document.getElementById('onlyTopBtn').classList.remove('tbtn-on');
+	const onlyTopBtn = document.getElementById('onlyTopBtn');
+	if (onlyTopBtn) onlyTopBtn.classList.remove('tbtn-on');
 	document.getElementById('filterBadge').style.display = 'none';
 	if (rerender && rawData) {
 		activeDates = regionData().dates.map((_, i) => i);
@@ -685,7 +705,8 @@ function toggleFilterMenu() { document.getElementById('filterWrap').classList.to
 
 function toggleOnlyTop() {
 	F.onlyTop = !F.onlyTop;
-	document.getElementById('onlyTopBtn').classList.toggle('tbtn-on', F.onlyTop);
+	const onlyTopBtn = document.getElementById('onlyTopBtn');
+	if (onlyTopBtn) onlyTopBtn.classList.toggle('tbtn-on', F.onlyTop);
 	applyFilters();
 }
 

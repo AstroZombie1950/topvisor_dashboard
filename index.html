@@ -9,129 +9,254 @@
 </head>
 <body>
 
-<!-- TOPBAR -->
-<div class="topbar" id="topbar">
-	<div class="tbi" id="tbiProject" onclick="toggleTbi('tbiProject')">
-		📁 <span id="lblProject">…</span><span class="chev">▼</span>
-		<div class="tb-dd" id="ddProject"></div>
+<!-- ГЛОБАЛЬНАЯ ШАПКА -->
+<div class="global-header">
+	<div class="gh-left">
+		<div class="gh-logo">
+			<svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="11" fill="#3b82f6"/><path d="M6 11.5L9.5 15L16 8" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+		</div>
+		<div class="tbi gh-project" id="tbiProject" onclick="toggleTbi('tbiProject')">
+			<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="2" width="14" height="11" rx="2" stroke="#6b7280" stroke-width="1.5"/><path d="M5 2V1M11 2V1" stroke="#6b7280" stroke-width="1.5" stroke-linecap="round"/></svg>
+			<span id="lblProject">…</span>
+			<span class="chev">▼</span>
+			<div class="tb-dd" id="ddProject"></div>
+		</div>
+		<div class="gh-sep"></div>
+		<div class="gh-toolbox">
+			<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M2 8h8M2 12h5" stroke="#3b82f6" stroke-width="1.5" stroke-linecap="round"/></svg>
+			<span>Тулбокс</span>
+		</div>
 	</div>
-	<div class="tbi" id="tbiEngine" onclick="toggleTbi('tbiEngine')">
-		<span style="color:#f97316;font-weight:700">Я</span>
-		<span id="lblEngine">Yandex</span><span class="chev">▼</span>
-		<div class="tb-dd" id="ddEngine"></div>
+	<div class="gh-right">
+		<div class="gh-btn">
+			<svg width="15" height="15" viewBox="0 0 15 15" fill="none"><rect x="1" y="3" width="13" height="10" rx="2" stroke="#6b7280" stroke-width="1.4"/><path d="M1 6h13" stroke="#6b7280" stroke-width="1.4"/></svg>
+			Тикеты
+		</div>
+		<div class="gh-btn">
+			<svg width="15" height="15" viewBox="0 0 15 15" fill="none"><circle cx="7.5" cy="7.5" r="6" stroke="#6b7280" stroke-width="1.4"/><path d="M7.5 4.5v3.5l2 1.5" stroke="#6b7280" stroke-width="1.4" stroke-linecap="round"/></svg>
+			База знаний
+		</div>
+		<div class="gh-balance">57.80 ₽</div>
+		<div class="gh-icon-btn">
+			<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#6b7280" stroke-width="1.4"/><path d="M8 4v4l2.5 2.5" stroke="#6b7280" stroke-width="1.4" stroke-linecap="round"/></svg>
+		</div>
+		<div class="gh-icon-btn">
+			<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2a4 4 0 014 4c0 3 1 4 2 5H2c1-1 2-2 2-5a4 4 0 014-4z" stroke="#6b7280" stroke-width="1.4"/><path d="M6.5 13a1.5 1.5 0 003 0" stroke="#6b7280" stroke-width="1.4"/></svg>
+		</div>
+		<div class="gh-avatar">А</div>
 	</div>
-	<div class="tbi" id="tbiRegion" onclick="toggleTbi('tbiRegion')">
-		📍 <span id="lblRegion">—</span><span class="chev">▼</span>
-		<div class="tb-dd" id="ddRegion"></div>
-	</div>
-	<div class="tbi" id="tbiGroups" onclick="toggleTbi('tbiGroups')">
-		⊞ <span id="lblGroups">Все группы</span><span class="chev">▼</span>
-		<div class="tb-dd" id="ddGroups"></div>
-	</div>
-	<div class="tbi" id="tbiTags" onclick="toggleTbi('tbiTags')">
-		<span style="width:8px;height:8px;border-radius:50%;background:var(--muted);display:inline-block"></span>
-		<span id="lblTags">Все теги</span><span class="chev">▼</span>
-		<div class="tb-dd" id="ddTags"></div>
-	</div>
-	<div class="tbi" id="tbiDates" onclick="toggleTbi('tbiDates')">
-		📅 <span id="lblDates">—</span><span class="chev">▼</span>
-		<div class="tb-dd" onclick="event.stopPropagation()">
-			<div style="padding:12px;min-width:240px">
-				<div class="ddh" style="padding:0 0 8px">Отображаемые даты</div>
-				<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px">
-					<span class="dd-preset" onclick="selectAllDates()">Все</span>
-					<span class="dd-preset" onclick="selectLastN(1)">Последняя</span>
-					<span class="dd-preset" onclick="selectLastN(2)">2 даты</span>
-					<span class="dd-preset" onclick="selectLastN(3)">3 даты</span>
+</div>
+
+<!-- ОБЁРТКА: сайдбар + контент -->
+<div class="app-layout">
+
+	<!-- ЛЕВЫЙ САЙДБАР -->
+	<nav class="sidebar">
+		<div class="sb-item sb-item-active" title="Позиции">
+			<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 14l4-5 3 3 5-7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+		</div>
+		<div class="sb-item" title="Сводка">
+			<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="10" width="3" height="6" rx="1" fill="currentColor"/><rect x="7.5" y="6" width="3" height="10" rx="1" fill="currentColor"/><rect x="13" y="2" width="3" height="14" rx="1" fill="currentColor"/></svg>
+		</div>
+		<div class="sb-item" title="Запросы">
+			<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="8" cy="8" r="5.5" stroke="currentColor" stroke-width="1.6"/><path d="M12.5 12.5L16 16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+		</div>
+		<div class="sb-item" title="Конкуренты">
+			<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2L2 7h2v8h4v-5h2v5h4V7h2L9 2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+		</div>
+		<div class="sb-item" title="Динамика">
+			<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M2 13l4-4 3 3 5-6 2 1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+		</div>
+		<div class="sb-item" title="Теги">
+			<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M2 9.5L8.5 3H15v6.5L8.5 16 2 9.5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="12" cy="6" r="1.2" fill="currentColor"/></svg>
+		</div>
+		<div class="sb-item" title="Отчёты">
+			<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="3" y="2" width="12" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M6 6h6M6 9h6M6 12h4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+		</div>
+		<div class="sb-item" title="Настройки" style="margin-top:auto">
+			<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="2.5" stroke="currentColor" stroke-width="1.5"/><path d="M9 1.5v2M9 14.5v2M1.5 9h2M14.5 9h2M3.6 3.6l1.4 1.4M13 13l1.4 1.4M3.6 14.4l1.4-1.4M13 5l1.4-1.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+		</div>
+	</nav>
+
+	<!-- ОСНОВНОЙ КОНТЕНТ -->
+	<div class="main-content">
+
+		<!-- TOPBAR -->
+		<div class="topbar" id="topbar">
+			<!-- Кнопка обновления — синий квадрат с белыми стрелками -->
+			<div class="tbi-refresh" title="Обновить">
+				<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+					<!-- Верхняя дуга со стрелкой вправо -->
+					<path d="M21 12a9 9 0 0 0-9-9 9 9 0 0 0-6.36 2.64L3 8" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+					<polyline points="3,3 3,8 8,8" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+					<!-- Нижняя дуга со стрелкой влево -->
+					<path d="M3 12a9 9 0 0 0 9 9 9 9 0 0 0 6.36-2.64L21 16" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+					<polyline points="21,21 21,16 16,16" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+				</svg>
+			</div>
+
+			<div class="tbi" id="tbiEngine" onclick="toggleTbi('tbiEngine')">
+				<span style="color:#f97316;font-weight:700;font-size:14px">Я</span>
+				<span id="lblEngine">Yandex</span><span class="chev">▼</span>
+				<div class="tb-dd" id="ddEngine"></div>
+			</div>
+			<div class="tbi" id="tbiRegion" onclick="toggleTbi('tbiRegion')">
+				<svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1.5C4.5 1.5 3 3 3 5c0 2.5 3.5 6.5 3.5 6.5S10 7.5 10 5c0-2-1.5-3.5-3.5-3.5z" stroke="#6b7280" stroke-width="1.3"/><circle cx="6.5" cy="5" r="1.2" fill="#6b7280"/></svg>
+				<span id="lblRegion">—</span><span class="chev">▼</span>
+				<div class="tb-dd" id="ddRegion"></div>
+			</div>
+			<div class="tbi" id="tbiGroups" onclick="toggleTbi('tbiGroups')">
+				<svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="1" y="1" width="5" height="5" rx="1" stroke="#6b7280" stroke-width="1.3"/><rect x="7" y="1" width="5" height="5" rx="1" stroke="#6b7280" stroke-width="1.3"/><rect x="1" y="7" width="5" height="5" rx="1" stroke="#6b7280" stroke-width="1.3"/><rect x="7" y="7" width="5" height="5" rx="1" stroke="#6b7280" stroke-width="1.3"/></svg>
+				<span id="lblGroups">Все группы</span><span class="chev">▼</span>
+				<div class="tb-dd" id="ddGroups"></div>
+			</div>
+			<div class="tbi" id="tbiTags" onclick="toggleTbi('tbiTags')">
+				<span style="width:8px;height:8px;border-radius:50%;background:var(--muted);display:inline-block"></span>
+				<span id="lblTags">Все теги</span><span class="chev">▼</span>
+				<div class="tb-dd" id="ddTags"></div>
+			</div>
+			<div class="tbi" id="tbiDates" onclick="toggleTbi('tbiDates')">
+				<svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="1" y="2" width="11" height="10" rx="1.5" stroke="#6b7280" stroke-width="1.3"/><path d="M1 5h11M4 1v2M9 1v2" stroke="#6b7280" stroke-width="1.3" stroke-linecap="round"/></svg>
+				<span id="lblDates">—</span><span class="chev">▼</span>
+				<div class="tb-dd" onclick="event.stopPropagation()">
+					<div style="padding:12px;min-width:240px">
+						<div class="ddh" style="padding:0 0 8px">Отображаемые даты</div>
+						<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px">
+							<span class="dd-preset" onclick="selectAllDates()">Все</span>
+							<span class="dd-preset" onclick="selectLastN(1)">Последняя</span>
+							<span class="dd-preset" onclick="selectLastN(2)">2 даты</span>
+							<span class="dd-preset" onclick="selectLastN(3)">3 даты</span>
+						</div>
+						<div class="dd-colhead">Выберите даты:</div>
+						<div id="dateColList"></div>
+						<div style="margin-top:10px;display:flex;gap:8px">
+							<button class="fapply" style="flex:1" onclick="applyDateFilter()">Применить</button>
+							<button class="fapply" style="flex:1;background:#6b7280" onclick="openCalendar();closeAllTbi()">Календарь</button>
+						</div>
+					</div>
 				</div>
-				<div class="dd-colhead">Выберите даты:</div>
-				<div id="dateColList"></div>
-				<div style="margin-top:10px;display:flex;gap:8px">
-					<button class="fapply" style="flex:1" onclick="applyDateFilter()">Применить</button>
-					<button class="fapply" style="flex:1;background:#6b7280" onclick="openCalendar();closeAllTbi()">Календарь</button>
+			</div>
+
+			<!-- Правые три иконки: график, экспорт, настройки -->
+			<div class="topbar-right">
+				<div class="tb-icon-btn-right" title="График">
+					<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="9" width="3" height="6" rx="1" fill="currentColor"/><rect x="6" y="5" width="3" height="10" rx="1" fill="currentColor"/><rect x="11" y="1" width="3" height="14" rx="1" fill="currentColor"/></svg>
+				</div>
+				<div class="tb-icon-btn-right" title="Экспорт">
+					<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="10" height="12" rx="1.5" stroke="currentColor" stroke-width="1.4"/><path d="M10 2l3 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M10 2v3h3" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M5 7h5M5 10h3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+				</div>
+				<div class="tb-icon-btn-right" title="Настройки">
+					<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M7 2H2M14 2h-4M7 2a2 2 0 104 0M5 8H2M14 8H8M5 8a2 2 0 104 0M10 14H2M14 14h-1M10 14a2 2 0 104 0" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
 				</div>
 			</div>
 		</div>
-	</div>
-</div>
 
-<!-- STATS -->
-<div class="stats-panel">
-	<div class="donut-wrap">
-		<svg class="donut-svg" id="donutSvg" viewBox="0 0 64 64"></svg>
-		<div class="donut-legend" id="donutLegend"></div>
-	</div>
-	<div class="metric-block">
-		<div class="metric-label">Видимость <span class="metric-delta" id="visDelta"></span></div>
-		<div class="sparkline-wrap"><svg id="spkVis" width="110" height="30"></svg></div>
-		<div class="metric-val" id="visVal"></div>
-	</div>
-	<div class="metric-block">
-		<div class="metric-label">Средняя <span class="metric-delta" id="avgDelta"></span></div>
-		<div class="sparkline-wrap"><svg id="spkAvg" width="110" height="30"></svg></div>
-		<div class="metric-val" id="avgVal"></div>
-	</div>
-	<div class="metric-block">
-		<div class="metric-label">Медианная <span class="metric-delta" id="medDelta"></span></div>
-		<div class="sparkline-wrap"><svg id="spkMed" width="110" height="30"></svg></div>
-		<div class="metric-val" id="medVal"></div>
-	</div>
-	<div class="tops-wrap" id="topsWrap"></div>
-</div>
-
-<!-- TOOLBAR -->
-<div class="table-toolbar">
-	<div class="search-box">
-		<span style="color:var(--muted)">🔍</span>
-		<input type="text" id="searchInput" placeholder="Поиск по запросам" oninput="applyFilters()">
-	</div>
-	<div class="tbtn sort-wrap" id="sortWrap" onclick="toggleSort()">
-		↕ Сортировка
-		<div class="sort-menu">
-			<div class="smi smi-on" data-s="default"   onclick="setSort(this)"><span class="smck">✓</span>По умолчанию</div>
-			<div class="smi"        data-s="name-az"   onclick="setSort(this)"><span class="smck">✓</span>Имя А-Я</div>
-			<div class="smi"        data-s="name-za"   onclick="setSort(this)"><span class="smck">✓</span>Имя Я-А</div>
-			<div class="smi"        data-s="freq-desc" onclick="setSort(this)"><span class="smck">✓</span>Частота 9-1</div>
-			<div class="smi"        data-s="freq-asc"  onclick="setSort(this)"><span class="smck">✓</span>Частота 1-9</div>
-			<div class="smi"        data-s="pos-asc"   onclick="setSort(this)"><span class="smck">✓</span>Позиция (лучшая)</div>
-			<div class="smi"        data-s="pos-desc"  onclick="setSort(this)"><span class="smck">✓</span>Позиция (худшая)</div>
-		</div>
-	</div>
-	<div class="tbtn filter-wrap" id="filterWrap" onclick="toggleFilterMenu()">
-		▽ Фильтр <span class="tbadge" id="filterBadge" style="display:none">0</span>
-		<div class="filter-menu" onclick="event.stopPropagation()">
-			<div class="fst">Статус</div>
-			<div class="fchips">
-				<span class="fchip" data-fs="found"    onclick="toggleChip(this)">Найдены</span>
-				<span class="fchip" data-fs="notfound" onclick="toggleChip(this)">Не найдены</span>
+		<!-- STATS -->
+		<div class="stats-panel">
+			<div class="donut-wrap">
+				<svg class="donut-svg" id="donutSvg" viewBox="0 0 64 64"></svg>
+				<div class="donut-legend" id="donutLegend"></div>
 			</div>
-			<div class="fst">Динамика</div>
-			<div class="fchips">
-				<span class="fchip" data-fd="up"   onclick="toggleChip(this)">↑ Выросли</span>
-				<span class="fchip" data-fd="down" onclick="toggleChip(this)">↓ Упали</span>
-				<span class="fchip" data-fd="same" onclick="toggleChip(this)">= Без изменений</span>
+			<div class="metric-block">
+				<div class="metric-label">Видимость <span class="metric-delta" id="visDelta"></span></div>
+				<div class="sparkline-wrap"><svg id="spkVis" width="110" height="30"></svg></div>
+				<div class="metric-val" id="visVal"></div>
 			</div>
-			<button class="fapply" onclick="applyFilters();document.getElementById('filterWrap').classList.remove('fmopen')">Применить</button>
+			<div class="metric-block">
+				<div class="metric-label">Средняя <span class="metric-delta" id="avgDelta"></span></div>
+				<div class="sparkline-wrap"><svg id="spkAvg" width="110" height="30"></svg></div>
+				<div class="metric-val" id="avgVal"></div>
+			</div>
+			<div class="metric-block">
+				<div class="metric-label">Медианная <span class="metric-delta" id="medDelta"></span></div>
+				<div class="sparkline-wrap"><svg id="spkMed" width="110" height="30"></svg></div>
+				<div class="metric-val" id="medVal"></div>
+			</div>
+			<div class="tops-wrap" id="topsWrap"></div>
 		</div>
-	</div>
-	<div class="tbtn" id="onlyTopBtn" onclick="toggleOnlyTop()">В топ-100</div>
-	<div class="tbtn tbtn-reset" id="resetBtn" onclick="resetAll()" style="display:none">✕ Сбросить фильтры</div>
-</div>
 
-<!-- ТАБЛИЦА -->
-<div class="table-wrap">
-	<table id="posTable">
-		<thead><tr>
-			<th style="width:32px"></th>
-			<th class="thp">Запросы <span id="kwCount" style="color:var(--muted);font-weight:400"></span></th>
-			<th class="thf">Частота<br><span style="color:var(--accent);font-size:10px">"!ч"</span></th>
-			<th class="thg">Группа</th>
-			<th style="width:60px">Теги</th>
-		</tr></thead>
-		<tbody id="tbody"></tbody>
-	</table>
-	<div class="empty-state" id="emptyState" style="display:none">Ничего не найдено по текущим фильтрам</div>
-</div>
+		<!-- TOOLBAR -->
+		<div class="table-toolbar">
+			<div class="search-box">
+				<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="6" cy="6" r="4.5" stroke="#8a9ab0" stroke-width="1.4"/><path d="M10 10l2.5 2.5" stroke="#8a9ab0" stroke-width="1.4" stroke-linecap="round"/></svg>
+				<input type="text" id="searchInput" placeholder="Поиск по запросам" oninput="applyFilters()">
+			</div>
+			<div style="flex:1"></div>
+
+			<!-- Таблетка-переключатель Позиции/Сниппеты -->
+			<div class="view-toggle">
+				<div class="view-toggle-btn vt-on">Позиции</div>
+				<div class="view-toggle-btn">Сниппеты</div>
+			</div>
+
+			<div class="toolbar-sep"></div>
+
+			<!-- Сортировка — плоская -->
+			<div class="tbtn sort-wrap" id="sortWrap" onclick="toggleSort()">
+				<svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 3.5h9M2 6.5h6M2 9.5h3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M10 5v6M10 11l-1.5-1.5M10 11l1.5-1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+				Сортировка
+				<div class="sort-menu">
+					<div class="smi smi-on" data-s="default"   onclick="setSort(this)"><span class="smck">✓</span>По умолчанию</div>
+					<div class="smi"        data-s="name-az"   onclick="setSort(this)"><span class="smck">✓</span>Имя А-Я</div>
+					<div class="smi"        data-s="name-za"   onclick="setSort(this)"><span class="smck">✓</span>Имя Я-А</div>
+					<div class="smi"        data-s="freq-desc" onclick="setSort(this)"><span class="smck">✓</span>Частота 9-1</div>
+					<div class="smi"        data-s="freq-asc"  onclick="setSort(this)"><span class="smck">✓</span>Частота 1-9</div>
+					<div class="smi"        data-s="pos-asc"   onclick="setSort(this)"><span class="smck">✓</span>Позиция (лучшая)</div>
+					<div class="smi"        data-s="pos-desc"  onclick="setSort(this)"><span class="smck">✓</span>Позиция (худшая)</div>
+				</div>
+			</div>
+
+			<!-- Фильтр — плоский -->
+			<div class="tbtn filter-wrap" id="filterWrap" onclick="toggleFilterMenu()">
+				<svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M1 2h11l-4 5v4l-3-1V7L1 2z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
+				Фильтр <span class="tbadge" id="filterBadge" style="display:none">0</span>
+				<div class="filter-menu" onclick="event.stopPropagation()">
+					<div class="fst">Статус</div>
+					<div class="fchips">
+						<span class="fchip" data-fs="found"    onclick="toggleChip(this)">Найдены</span>
+						<span class="fchip" data-fs="notfound" onclick="toggleChip(this)">Не найдены</span>
+					</div>
+					<div class="fst">Динамика</div>
+					<div class="fchips">
+						<span class="fchip" data-fd="up"   onclick="toggleChip(this)">↑ Выросли</span>
+						<span class="fchip" data-fd="down" onclick="toggleChip(this)">↓ Упали</span>
+						<span class="fchip" data-fd="same" onclick="toggleChip(this)">= Без изменений</span>
+					</div>
+					<button class="fapply" onclick="applyFilters();document.getElementById('filterWrap').classList.remove('fmopen')">Применить</button>
+				</div>
+			</div>
+
+			<!-- Настройки вида -->
+			<div class="tbtn tbtn-icon" title="Настройки вида">
+				<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 2.5h12M1 7h12M1 11.5h12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="4" cy="2.5" r="1.5" fill="var(--surface)" stroke="currentColor" stroke-width="1.2"/><circle cx="9" cy="7" r="1.5" fill="var(--surface)" stroke="currentColor" stroke-width="1.2"/><circle cx="5" cy="11.5" r="1.5" fill="var(--surface)" stroke="currentColor" stroke-width="1.2"/></svg>
+				Настройки вида
+			</div>
+
+			<!-- Иконка со стрелками (как на референсе — справа) -->
+			<div class="tbtn tbtn-icon-only" title="">
+				<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M10 5l3 3-3 3M6 5L3 8l3 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+			</div>
+
+			<div class="tbtn tbtn-reset" id="resetBtn" onclick="resetAll()" style="display:none">✕ Сбросить</div>
+		</div>
+
+		<!-- ТАБЛИЦА -->
+		<div class="table-wrap">
+			<table id="posTable">
+				<thead><tr>
+					<th style="width:36px;text-align:center">
+						<svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="opacity:.4"><circle cx="8" cy="8" r="6" stroke="#64748b" stroke-width="1.4"/><circle cx="8" cy="8" r="2.5" stroke="#64748b" stroke-width="1.4"/><path d="M8 2V1M8 15v-1M2 8H1M15 8h-1" stroke="#64748b" stroke-width="1.4" stroke-linecap="round"/></svg>
+					</th>
+					<th class="thp">Запросы <span id="kwCount" style="color:var(--muted);font-weight:400"></span></th>
+					<th class="thf">Частота<br><span style="color:var(--accent);font-size:10px">"!ч"</span></th>
+				</tr></thead>
+				<tbody id="tbody"></tbody>
+			</table>
+			<div class="empty-state" id="emptyState" style="display:none">Ничего не найдено по текущим фильтрам</div>
+		</div>
+
+	</div><!-- /main-content -->
+</div><!-- /app-layout -->
 
 <!-- КАЛЕНДАРЬ -->
 <div class="cal-overlay" id="calOverlay" onclick="closeCalendar()">
